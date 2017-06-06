@@ -1,0 +1,4 @@
+grant{
+	// pe³ne uprawnienia dla wszystkich ³adowanych zdalnie klas
+	permission java.security.AllPermission;
+};
