@@ -1,11 +1,11 @@
 package java.rmi.client;
 
 import java.rmi.RemoteException;
-import java.rmi.common.Interface;
+import java.rmi.common.ICallback;
 import java.rmi.server.UnicastRemoteObject;
 
-public class ClientCallback extends UnicastRemoteObject implements Interface{
-	
+public class ClientCallback extends UnicastRemoteObject implements ICallback{
+
 	/**
 	 * 
 	 */
@@ -16,7 +16,13 @@ public class ClientCallback extends UnicastRemoteObject implements Interface{
 	}
 
 	@Override
-	public void communicate(String text) throws RemoteException {
-		System.out.println("Odebrano komunikat: " + text);
+	public void sendToFriend(String nick, String text) throws RemoteException {
+		System.out.println(nick + " send message: " + text);		
+	}
+
+	@Override
+	public void sendToGroup(String nick, String grpName, String text) throws RemoteException {
+		// TODO implementacja
+		
 	}
 }
