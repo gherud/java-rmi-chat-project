@@ -1,12 +1,14 @@
-package java.rmi.server;
+package rmi.server;
 
 import java.rmi.RemoteException;
-import java.rmi.common.ICallback;
-import java.rmi.common.IChat;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
+
+import rmi.common.ICallback;
+import rmi.common.IChat;
 
 @SuppressWarnings("serial")
 public class Servant extends UnicastRemoteObject implements IChat{
@@ -37,17 +39,17 @@ public class Servant extends UnicastRemoteObject implements IChat{
 
 	// Implementacja funkcji sendToFriend() znajduj¹cej siê w interfejsie IChat
 	public boolean sendToFriend(String nick, String text) throws RemoteException {
-		System.out.println("Server.sendToFriend(): with " + nick
-				+ " message: "+ text);
+		System.out.println("Server.sendToFriend() with: " + nick
+				+ ", message: "+ text);
 		return false;
 	}
-	
+
 	// Implementacja funkcji sendToFriend() znajduj¹cej siê w interfejsie IChat
-		public boolean sendToGroup(String grpName, String text) throws RemoteException {
-			System.out.println("Server.sendToGroup(): message to Group: " + grpName
-					+ " message: "+ text);
-			return false;
-		}
+	public boolean sendToGroup(String grpName, String text) throws RemoteException {
+		System.out.println("Server.sendToGroup() message to Group: " + grpName
+				+ ", message: "+ text);
+		return false;
+	}
 
 	// Implementacja funkcji findUser() znajduj¹cej siê w interfejsie IChat
 	public boolean findUser(String nick) throws RemoteException {
@@ -56,14 +58,13 @@ public class Servant extends UnicastRemoteObject implements IChat{
 		}
 		return false;
 	}
-	
-	public Vector<String> information(String nick) throws RemoteException{
+
+	public Vector<String> information() throws RemoteException{
 		Set<String> users = present.keySet();
 		Vector<String> vector = new Vector<String>();
 		for(String s : users){
-			if(s.matches(nick)) vector.add(s);
+			vector.add(s);
 		}
 		return vector;
 	}
-
 }

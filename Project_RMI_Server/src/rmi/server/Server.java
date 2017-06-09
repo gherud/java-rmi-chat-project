@@ -1,4 +1,4 @@
-package java.rmi.server;
+package rmi.server;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -23,7 +23,7 @@ public class Server {
 		try{
 			reg = LocateRegistry.createRegistry(1099); //utworzenie rejestru nazw
 			servant = new Servant();				//utworzenie zdalnego obiektu
-			reg.rebind("Server", (Remote) servant); //zwiazanie nazwy z obiektem
+			reg.rebind("Server", servant); //zwiazanie nazwy z obiektem
 			System.out.println("!!! CHAT READY TO USE !!!");
 		}
 		catch(RemoteException e){

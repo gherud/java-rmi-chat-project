@@ -1,4 +1,4 @@
-package java.rmi.common;
+package rmi.common;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -10,5 +10,5 @@ public interface IChat extends Remote{
 	boolean sendToFriend(String nick, String text) throws RemoteException;
 	boolean sendToGroup(String grpName, String text) throws RemoteException;
 	boolean findUser(String nick) throws RemoteException;
-	Vector<String> information(String nick) throws RemoteException;
+	Vector<String> information() throws RemoteException;
 }
