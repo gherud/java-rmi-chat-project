@@ -10,33 +10,38 @@ import java.util.Vector;
 import rmi.common.ICallback;
 import rmi.common.IChat;
 
-@SuppressWarnings("deprecation")
-public class ChatClient {
+public class Client {
 
 	private Scanner input = new Scanner(System.in);
+	String[] tab;
 	String userName;
+	String grpName;
 	IChat remoteObject;
 	ICallback callback;
 
 	public static void main(String[] args) {
 		if(args.length < 1){
-			System.out.println("Usage: ChatClient <server host name>");
+			System.out.println("No arguments in run configuration!");
 			System.exit(-1);
 		}
-		new ChatClient(args[0]);		
+		new Client(args[0]);
 	}
 
-	public ChatClient(String hostname){
-		System.out.println("Input your nickname: ");
+	public Client(String hostname){
+		System.out.println("Input your nick- and groupname, separate it with dot (.): ");
 		if(input.hasNextLine()){
-			userName = input.nextLine();
+			tab = input.nextLine().split(".");
+		}
+		userName = tab[0];
+		if(tab.length > 1){
+			grpName = tab[1];
 		}
 		Registry reg;	//rejestr nazw obiektów
 		try{
 			reg = LocateRegistry.getRegistry(hostname);
 			remoteObject = (IChat) reg.lookup("Server");
 			callback = new ClientCallback();
-			remoteObject.signUp(userName, callback);
+			remoteObject.signUp(userName, grpName, callback);
 			loggedInLoop();
 		}
 		catch(RemoteException e){
@@ -48,15 +53,16 @@ public class ChatClient {
 	}
 
 	private void sendToFriend(){
+		String uname;
 		System.out.println("Addressee name: ");
 		if(input.hasNextLine()){
-			userName = input.nextLine();
+			uname = input.nextLine();
 			String userText;
 			System.out.println("Enter text you want to send: ");
 			if(input.hasNextLine()){
 				userText = input.nextLine();
 				try{
-					remoteObject.sendToFriend(userName, userText);
+					remoteObject.sendToFriend(uname, userText);
 				}
 				catch(RemoteException e){
 					e.printStackTrace();
@@ -68,7 +74,7 @@ public class ChatClient {
 	public void sendToGroup(String grpName, String text){
 		// TODO ChatClient.sendToGroup() - implementacja
 	}
-	
+
 	public void findUser(){
 		// TODO ChatClient.findUser() - implementacja
 	}
@@ -81,21 +87,26 @@ public class ChatClient {
 		catch(RemoteException e){
 			e.printStackTrace();
 		}
-		System.out.println("There are " + vec.size() + " logged in user(s).");
+		if(vec.size() == 1){
+			System.out.println("There is " + vec.size() + " logged in user:");
+		}
+		else if(vec.size() > 1){
+			System.out.println("There are " + vec.size() + " logged in users:");
+		}
 		for(String s : vec){
 			System.out.println(" - " + s);
 		}
 	}
 
 	public void loggedInLoop() throws RemoteException{
-		System.out.println("Usage:\n[i]nformuj\t[f] - wyœlij do przyjaciela\t"
-				+ "[g] - wyœlij do grupy\t[s] - wyszukaj znajomego\n[q] - wyjœcie");
 		String line;
 		boolean loop = true;
 		while(loop){
+			System.out.println("Usage:\n\'i\'iloœæ u¿ytkowników\t\'f\' - wyœlij do przyjaciela\t"
+					+ "\'g\' - wyœlij do grupy\t\'s\' - wyszukaj znajomego\t\'q\' - wyjœcie");
 			line = input.nextLine();
 			if(!line.matches("[ifgsq]")){
-				System.out.println("Invalid character!");
+				System.out.println("Invalid command!");
 				continue;
 			}
 			switch (line){
@@ -106,7 +117,7 @@ public class ChatClient {
 				sendToFriend();
 				break;
 			case "g":
-//				sendToGroup();
+				//				sendToGroup();
 				break;
 			case "s":
 				findUser();
@@ -114,7 +125,7 @@ public class ChatClient {
 			case "q":
 				remoteObject.signOut(userName);
 				loop = false;
-				break;
+				return;
 			}
 		}
 	}

@@ -5,22 +5,18 @@ import java.rmi.server.UnicastRemoteObject;
 
 import rmi.common.ICallback;
 
-public class ClientCallback extends UnicastRemoteObject implements ICallback{
+public class ClientCallback extends UnicastRemoteObject implements ICallback {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 4725821013384439527L;
+	private static final long serialVersionUID = 4601203039320885872L;
 
-	public ClientCallback() throws RemoteException{
+	public ClientCallback() throws RemoteException {
 		super();
 	}
 
-	public void sendToFriend(String nick, String text) throws RemoteException {
-		System.out.println(nick + " send message: " + text);
-	}
-
-	public void sendToGroup(String nick, String grpName, String text) throws RemoteException {
-		System.out.println(nick + " send message to your group: " + grpName + " content: " + text);
+	public void receivedMessage(String nick, String text) throws RemoteException {
+		System.out.println("odebrano komunikat: " + text);		
 	}
 }
