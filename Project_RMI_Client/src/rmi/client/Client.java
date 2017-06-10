@@ -21,16 +21,16 @@ public class Client {
 
 	public static void main(String[] args) {
 		if(args.length < 1){
-			System.out.println("No arguments in run configuration!");
+			System.out.println("Brak argumentów w ustawieniach uruchamiania!");
 			System.exit(-1);
 		}
 		new Client(args[0]);
 	}
 
 	public Client(String hostname){
-		System.out.println("Input your nick- and groupname, separate it with dot (.): ");
+		System.out.println("Podaj nazwê u¿ytkownika oraz grupy, oddziel je podkreœleniem (_):");
 		if(input.hasNextLine()){
-			tab = input.nextLine().split(".");
+			tab = input.nextLine().split("_");
 		}
 		userName = tab[0];
 		if(tab.length > 1){
@@ -38,9 +38,12 @@ public class Client {
 		}
 		Registry reg;	//rejestr nazw obiektów
 		try{
+			// pobranie referencji do rejestru nazw obiektow
 			reg = LocateRegistry.getRegistry(hostname);
-			remoteObject = (IChat) reg.lookup("Server");
+			// odszukanie zdalnego obiektu po jego nazwie
+			remoteObject = (IChat) reg.lookup("ChatServer");
 			callback = new ClientCallback();
+			// wywolanie metod zdalnego obiektu
 			remoteObject.signUp(userName, grpName, callback);
 			loggedInLoop();
 		}
@@ -54,11 +57,11 @@ public class Client {
 
 	private void sendToFriend(){
 		String uname;
-		System.out.println("Addressee name: ");
+		System.out.println("Podaj nazwê u¿ytkownika, do którego chcesz wys³aæ wiadomoœæ:");
 		if(input.hasNextLine()){
 			uname = input.nextLine();
 			String userText;
-			System.out.println("Enter text you want to send: ");
+			System.out.println("Podaj treœæ wiadomoœci:");
 			if(input.hasNextLine()){
 				userText = input.nextLine();
 				try{
@@ -71,12 +74,42 @@ public class Client {
 		}
 	}
 
-	public void sendToGroup(String grpName, String text){
-		// TODO ChatClient.sendToGroup() - implementacja
+	public void sendToGroup(){
+		String group;
+		System.out.println("Podaj nazwê grupy, do której chcesz wys³aæ wiadomoœæ:");
+		if(input.hasNextLine()){
+			group = input.nextLine();
+			String grpText;
+			System.out.println("Podaj treœæ wiadomoœci:");
+			if(input.hasNextLine()){
+				grpText = input.nextLine();
+				try{
+					remoteObject.sendToGroup(group, grpText);
+				}
+				catch(RemoteException e){
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 	public void findUser(){
-		// TODO ChatClient.findUser() - implementacja
+		boolean contains = false;
+		String uname;
+		System.out.println("Podaj nazwê u¿ytkownika, którego szukasz:");
+		if (input.hasNextLine()){
+			uname = input.nextLine();
+			try {
+				contains = remoteObject.findUser(uname);
+			}
+			catch(RemoteException e){
+				e.printStackTrace();
+			}
+			if (contains){
+				System.out.println("U¿ytkownik: " + uname + " jest zalogowany!");
+			}
+			else System.out.println("U¿ytkownik: " + uname + " nie jest zalogowany!");
+		}
 	}
 
 	public void information(){
@@ -88,10 +121,10 @@ public class Client {
 			e.printStackTrace();
 		}
 		if(vec.size() == 1){
-			System.out.println("There is " + vec.size() + " logged in user:");
+			System.out.println("Zalogowany jest " + vec.size() + " u¿ytkownik:");
 		}
 		else if(vec.size() > 1){
-			System.out.println("There are " + vec.size() + " logged in users:");
+			System.out.println("Zalogowanych jest " + vec.size() + " u¿ytkowników:");
 		}
 		for(String s : vec){
 			System.out.println(" - " + s);
@@ -106,7 +139,7 @@ public class Client {
 					+ "\'g\' - wyœlij do grupy\t\'s\' - wyszukaj znajomego\t\'q\' - wyjœcie");
 			line = input.nextLine();
 			if(!line.matches("[ifgsq]")){
-				System.out.println("Invalid command!");
+				System.out.println("Niepoprawna komenda!");
 				continue;
 			}
 			switch (line){
@@ -117,7 +150,7 @@ public class Client {
 				sendToFriend();
 				break;
 			case "g":
-				//				sendToGroup();
+				sendToGroup();
 				break;
 			case "s":
 				findUser();

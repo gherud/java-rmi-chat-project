@@ -22,8 +22,8 @@ public class Server {
 		try{
 			reg = LocateRegistry.createRegistry(1099); //utworzenie rejestru nazw
 			servant = new Servant();				//utworzenie zdalnego obiektu
-			reg.rebind("Server", servant); //zwiazanie nazwy z obiektem
-			System.out.println("!!! CHAT READY TO USE !!!");
+			reg.rebind("ChatServer", servant); //zwiazanie nazwy z obiektem
+			System.out.println("!!! CZAT GOTOWY DO KORZYSTANIA !!!");
 		}
 		catch(RemoteException e){
 			e.printStackTrace();
