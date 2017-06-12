@@ -33,9 +33,10 @@ public class Client {
 			tab = input.nextLine().split("_");
 		}
 		userName = tab[0];
-		if(tab.length > 1){
-			grpName = tab[1];
+		if(tab.length <= 1){
+			grpName = "none";
 		}
+		else grpName = tab[1];
 		Registry reg;	//rejestr nazw obiektów
 		try{
 			// pobranie referencji do rejestru nazw obiektow
@@ -56,16 +57,16 @@ public class Client {
 	}
 
 	private void sendToFriend(){
-		String uname;
+		String to;
 		System.out.println("Podaj nazwê u¿ytkownika, do którego chcesz wys³aæ wiadomoœæ:");
 		if(input.hasNextLine()){
-			uname = input.nextLine();
+			to = input.nextLine();
 			String userText;
 			System.out.println("Podaj treœæ wiadomoœci:");
 			if(input.hasNextLine()){
 				userText = input.nextLine();
 				try{
-					remoteObject.sendToFriend(uname, userText);
+					remoteObject.sendToFriend(userName, to, userText);
 				}
 				catch(RemoteException e){
 					e.printStackTrace();
@@ -84,7 +85,7 @@ public class Client {
 			if(input.hasNextLine()){
 				grpText = input.nextLine();
 				try{
-					remoteObject.sendToGroup(group, grpText);
+					remoteObject.sendToGroup(userName, group, grpText);
 				}
 				catch(RemoteException e){
 					e.printStackTrace();

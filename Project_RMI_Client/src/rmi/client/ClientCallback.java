@@ -16,9 +16,8 @@ public class ClientCallback extends UnicastRemoteObject implements ICallback {
 		super();
 	}
 
-	public void sendToFriend(String nick, String message) throws RemoteException {
-		// FIXME ClientCallback.sendToFriend - wiadomoœci nie docieraj¹
-		System.out.println("Odebrano komunikat: " + message);		
+	public void sendToFriend(String from, String message) throws RemoteException {
+		System.out.println("Wiadomoœæ od " + from + ": " + message);		
 	}
 
 	public void sendToGroup(String nick, String grpName, String message) throws RemoteException {
