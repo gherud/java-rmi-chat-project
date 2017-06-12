@@ -4,8 +4,9 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
-import java.util.Vector;
 
 import rmi.common.ICallback;
 import rmi.common.IChat;
@@ -46,6 +47,7 @@ public class Client {
 			callback = new ClientCallback();
 			// wywolanie metod zdalnego obiektu
 			remoteObject.signUp(userName, grpName, callback);
+			System.out.println("Twoja nazwa: " + userName + ", nazwa grupy: " + grpName);
 			loggedInLoop();
 		}
 		catch(RemoteException e){
@@ -114,28 +116,27 @@ public class Client {
 	}
 
 	public void information(){
-		Vector<String> vec = new Vector<String>();
+		List<String> list = new ArrayList<String>();
 		try{
-			vec = remoteObject.information();
+			list = remoteObject.information();
 		}
 		catch(RemoteException e){
 			e.printStackTrace();
 		}
-		if(vec.size() == 1){
-			System.out.println("Zalogowany jest " + vec.size() + " u¿ytkownik:");
+		if(list.size() == 1){
+			System.out.println("Zalogowany jest " + list.size() + " u¿ytkownik:");
 		}
-		else if(vec.size() > 1){
-			System.out.println("Zalogowanych jest " + vec.size() + " u¿ytkowników:");
+		else if(list.size() > 1){
+			System.out.println("Zalogowanych jest " + list.size() + " u¿ytkowników:");
 		}
-		for(String s : vec){
+		for(String s : list){
 			System.out.println(" - " + s);
 		}
 	}
 
 	public void loggedInLoop() throws RemoteException{
 		String line;
-		boolean loop = true;
-		while(loop){
+		while(true){
 			System.out.println("Usage:\n\'i\'iloœæ u¿ytkowników\t\'f\' - wyœlij do przyjaciela\t"
 					+ "\'g\' - wyœlij do grupy\t\'s\' - wyszukaj znajomego\t\'q\' - wyjœcie");
 			line = input.nextLine();
@@ -158,7 +159,7 @@ public class Client {
 				break;
 			case "q":
 				remoteObject.signOut(userName);
-				loop = false;
+				System.exit(1);
 				return;
 			}
 		}

@@ -21,8 +21,7 @@ public class ClientCallback extends UnicastRemoteObject implements ICallback {
 	}
 
 	public void sendToGroup(String nick, String grpName, String message) throws RemoteException {
-		// FIXME ClientCallback.sendToGroup - wiadomoœci nie docieraj¹
-		System.out.println("Wiadomoœæ do grupy " + grpName + " od u¿ytkownika " + nick + ":\n" + message);
+		System.out.println("Wiadomoœæ do grupy: " + grpName + " od u¿ytkownika " + nick + ":\t" + message);
 		
 	}
 }
