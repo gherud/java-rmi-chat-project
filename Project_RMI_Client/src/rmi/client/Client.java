@@ -16,7 +16,8 @@ public class Client {
 	private Scanner input = new Scanner(System.in);
 	String[] tab;
 	String userName;
-	String grpName;
+	String groupName;
+	String line;
 	IChat remoteObject;
 	ICallback callback;
 
@@ -35,9 +36,9 @@ public class Client {
 		}
 		userName = tab[0];
 		if(tab.length <= 1){
-			grpName = "none";
+			groupName = "none";
 		}
-		else grpName = tab[1];
+		else groupName = tab[1];
 		Registry reg;	//rejestr nazw obiektów
 		try{
 			// pobranie referencji do rejestru nazw obiektow
@@ -46,8 +47,8 @@ public class Client {
 			remoteObject = (IChat) reg.lookup("ChatServer");
 			callback = new ClientCallback();
 			// wywolanie metod zdalnego obiektu
-			remoteObject.signUp(userName, grpName, callback);
-			System.out.println("Twoja nazwa: " + userName + ", nazwa grupy: " + grpName);
+			remoteObject.signUp(userName, groupName, callback);
+			System.out.println("Twoja nazwa: " + userName + ", nazwa grupy: " + groupName);
 			loggedInLoop();
 		}
 		catch(RemoteException e){
@@ -59,16 +60,16 @@ public class Client {
 	}
 
 	private void sendToFriend(){
-		String to;
+		String line;
 		System.out.println("Podaj nazwê u¿ytkownika, do którego chcesz wys³aæ wiadomoœæ:");
 		if(input.hasNextLine()){
-			to = input.nextLine();
+			line = input.nextLine();
 			String userText;
 			System.out.println("Podaj treœæ wiadomoœci:");
 			if(input.hasNextLine()){
 				userText = input.nextLine();
 				try{
-					remoteObject.sendToFriend(userName, to, userText);
+					remoteObject.sendToFriend(userName, line, userText);
 				}
 				catch(RemoteException e){
 					e.printStackTrace();
@@ -78,16 +79,16 @@ public class Client {
 	}
 
 	public void sendToGroup(){
-		String group;
+		String line;
 		System.out.println("Podaj nazwê grupy, do której chcesz wys³aæ wiadomoœæ:");
 		if(input.hasNextLine()){
-			group = input.nextLine();
-			String grpText;
+			line = input.nextLine();
+			String groupText;
 			System.out.println("Podaj treœæ wiadomoœci:");
 			if(input.hasNextLine()){
-				grpText = input.nextLine();
+				groupText = input.nextLine();
 				try{
-					remoteObject.sendToGroup(userName, group, grpText);
+					remoteObject.sendToGroup(userName, line, groupText);
 				}
 				catch(RemoteException e){
 					e.printStackTrace();
@@ -97,21 +98,21 @@ public class Client {
 	}
 
 	public void findUser(){
-		boolean contains = false;
-		String uname;
+		String line;
+		boolean bool = false;
 		System.out.println("Podaj nazwê u¿ytkownika, którego szukasz:");
 		if (input.hasNextLine()){
-			uname = input.nextLine();
+			line = input.nextLine();
 			try {
-				contains = remoteObject.findUser(uname);
+				bool = remoteObject.findUser(line);
 			}
 			catch(RemoteException e){
 				e.printStackTrace();
 			}
-			if (contains){
-				System.out.println("U¿ytkownik: " + uname + " jest zalogowany!");
+			if (bool){
+				System.out.println("U¿ytkownik: " + line + " jest zalogowany!");
 			}
-			else System.out.println("U¿ytkownik: " + uname + " nie jest zalogowany!");
+			else System.out.println("U¿ytkownik: " + line + " nie jest zalogowany!");
 		}
 	}
 
@@ -134,28 +135,75 @@ public class Client {
 		}
 	}
 
-	public void loggedInLoop() throws RemoteException{
-		String line;
-		while(true){
-			System.out.println("Usage:\n\'i\'iloœæ u¿ytkowników\t\'f\' - wyœlij do przyjaciela\t"
-					+ "\'g\' - wyœlij do grupy\t\'s\' - wyszukaj znajomego\t\'q\' - wyjœcie");
+	public void joinGroup(){
+		boolean added = false;
+		System.out.println("Podaj nazwê grupy do której chcesz do³¹czyæ: ");
+		if(input.hasNextLine()){
 			line = input.nextLine();
-			if(!line.matches("[ifgsq]")){
+			try{
+				added = remoteObject.joinGroup(userName, line);
+			}
+			catch(RemoteException e){
+				e.printStackTrace();
+			}
+			if(added){
+				System.out.println("Zosta³eœ dodany do grupy " + line);
+			}
+			else{
+				System.out.println("Dodanie do grupy: " + line + " nie powiod³o siê!");
+			}
+		}
+	}
+
+	public void addToGroup(){
+		String nick;
+		boolean bool = false;
+		System.out.println("Podaj nazwê u¿ytkownika, którego chcesz dodaæ do grupy " + groupName);
+		if(input.hasNextLine()){
+			nick = input.nextLine();
+			try{
+				bool = remoteObject.askIfAdd(userName, nick, groupName);
+			}
+			catch(RemoteException e){
+				e.printStackTrace();
+			}
+			if(bool){
+				System.out.println("U¿ytkownik "+nick+" zosta³ pomyœlnie dodany do grupy " + groupName);
+			}
+			else System.out.println("Dodanie u¿ytkownika "+nick+" do grupy " + groupName 
+					+ " nie powiod³o siê, lub u¿ytkownik odrzuci³ zaproszenie.");
+		}
+
+	}
+
+	public void loggedInLoop() throws RemoteException{
+		while(true){
+			System.out.print("Usage:\n\'a\' - dodaj do grupy\t\'f\' - znajdz u¿ytkownika"
+					+ "\t\'g\' - wyœlij do grupy\t\'i\' - iloœæ u¿ytkowników online\n"
+					+ "\'j\' - do³¹cz do grupy\t\'s\' - wyœlij wiadomoœæ\t\t\'q\' - wyjœcie");
+			line = input.nextLine();
+			if(!line.matches("[afgijsq]")){
 				System.out.println("Niepoprawna komenda!");
 				continue;
 			}
 			switch (line){
-			case "i":
-				information();
+			case "a":
+				addToGroup();
 				break;
 			case "f":
-				sendToFriend();
+				findUser();
 				break;
 			case "g":
 				sendToGroup();
 				break;
+			case "i":
+				information();
+				break;
+			case "j":
+				joinGroup();
+				break;
 			case "s":
-				findUser();
+				sendToFriend();
 				break;
 			case "q":
 				remoteObject.signOut(userName);
