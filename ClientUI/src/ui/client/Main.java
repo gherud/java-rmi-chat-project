@@ -17,7 +17,7 @@ public class Main extends Application {
 			Scene scene = new Scene(root);
 			primaryStage.setScene(scene);
 			primaryStage.setOnCloseRequest(e -> Platform.exit());
-			primaryStage.setTitle("Logged in as: " + Client.getUserName());
+			primaryStage.setTitle("Logged in as: " + Client.user.getUserName());
 			primaryStage.setResizable(false);
 			primaryStage.show();
 		} catch(Exception e) {

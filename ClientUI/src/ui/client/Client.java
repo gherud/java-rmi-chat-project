@@ -18,11 +18,11 @@ public class Client {
 
 	private Scanner input = new Scanner(System.in);
 	private static final String HOST = "localhost";
-	private static String userName;
+	private String userName;
 	String groupName, line;
 	static IChat remoteObject;
 	ICallback callback;
-	private static User user;
+	static User user;
 
 	public static void main(String[] args) {
 		new Client();
@@ -31,13 +31,13 @@ public class Client {
 	public Client(){
 		// Okno dialogowe, w którym podajemy nazwê u¿ytkownika
 		do{
-			user.setUserName(JOptionPane.showInputDialog("Podaj nazwê u¿ytkownika:"));
-			if(user.getUserName() == null){
+			userName = JOptionPane.showInputDialog("Podaj nazwê u¿ytkownika:");
+			if(userName == null){
 				System.exit(-1);
 			}
 
-		} while(user.getUserName().isEmpty() || user.getUserName() == "");
-		user.setGroupName("all");
+		} while(userName.isEmpty() || userName == "");
+		user = new User(userName, "all");
 
 		Registry reg;	//rejestr nazw obiektów
 		try{
