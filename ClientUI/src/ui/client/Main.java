@@ -1,13 +1,14 @@
 package ui.client;
-	
+
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-	
+
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -15,14 +16,15 @@ public class Main extends Application {
 			Parent root = FXMLLoader.load(getClass().getResource("UI.fxml"));
 			Scene scene = new Scene(root);
 			primaryStage.setScene(scene);
-			primaryStage.setTitle("Chat by GH");
+			primaryStage.setOnCloseRequest(e -> Platform.exit());
+			primaryStage.setTitle("Logged in as: " + Client.getUserName());
 			primaryStage.setResizable(false);
 			primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		launch(args);
 	}

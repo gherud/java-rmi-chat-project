@@ -12,7 +12,7 @@ public interface IChat extends Remote{
 	 * @param to - odbiorca wiadomoœci
 	 * @param message - treœæ wiadomoœci
 	 */
-	boolean sendToFriend(String from, String to, String message) throws RemoteException;
+	boolean sendToFriend(String from, String message) throws RemoteException;	// deleted: String to
 	/**
 	 * 
 	 * @param from - adresat wiadomoœci
@@ -20,7 +20,7 @@ public interface IChat extends Remote{
 	 * @param message - treœæ wiadomoœci
 	 */
 	boolean sendToGroup(String from, String groupName, String message) throws RemoteException;
-	boolean findUser(String nick) throws RemoteException;
+//	boolean findUser(String nick) throws RemoteException;
 	List<String> information() throws RemoteException;
 	boolean joinGroup(String nick, String groupName) throws RemoteException;
 	/**

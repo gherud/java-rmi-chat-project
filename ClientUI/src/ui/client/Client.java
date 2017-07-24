@@ -1,4 +1,4 @@
-package rmi.client;
+package ui.client;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -8,47 +8,52 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.swing.JOptionPane;
+
 import rmi.common.ICallback;
 import rmi.common.IChat;
 
 public class Client {
 
 	private Scanner input = new Scanner(System.in);
-	String[] tab;
-	String userName;
-	String groupName;
-	String line;
-	IChat remoteObject;
+//	String[] tab;
+	private static final String HOST = "localhost";
+	private static String userName;
+	String groupName, line;
+	static IChat remoteObject;
 	ICallback callback;
 
 	public static void main(String[] args) {
-		if(args.length < 1){
-			System.out.println("Brak argumentów w ustawieniach uruchamiania!");
-			System.exit(-1);
-		}
-		new Client(args[0]);
+		new Client();
 	}
 
-	public Client(String hostname){
-		System.out.println("Podaj nazwê u¿ytkownika oraz grupy, oddziel je podkreœleniem (_):");
-		if(input.hasNextLine()){
-			tab = input.nextLine().split("_");
-		}
-		userName = tab[0];
-		if(tab.length <= 1){
-			groupName = "none";
-		}
-		else groupName = tab[1];
+	public Client(){
+		// Okno dialogowe, w którym podajemy nazwê u¿ytkownika
+		do{
+			setUserName(JOptionPane.showInputDialog("Podaj nazwê u¿ytkownika:"));
+			if(userName == null){
+				System.exit(-1);
+			}
+
+		} while(userName.isEmpty() || userName == "");
+		groupName = "all";
+
 		Registry reg;	//rejestr nazw obiektów
 		try{
 			// pobranie referencji do rejestru nazw obiektow
-			reg = LocateRegistry.getRegistry(hostname);
+			reg = LocateRegistry.getRegistry(HOST);
 			// odszukanie zdalnego obiektu po jego nazwie
 			remoteObject = (IChat) reg.lookup("ChatServer");
 			callback = new ClientCallback();
 			// wywolanie metod zdalnego obiektu
-			remoteObject.signUp(userName, groupName, callback);
+			remoteObject.signUp(getUserName(), groupName, callback);
 			System.out.println("Twoja nazwa: " + userName + ", nazwa grupy: " + groupName);
+			new Thread() {
+	            @Override
+	            public void run() {
+	                javafx.application.Application.launch(Main.class);
+	            }
+	        }.start();
 			loggedInLoop();
 		}
 		catch(RemoteException e){
@@ -59,22 +64,12 @@ public class Client {
 		}
 	}
 
-	private void sendToFriend(){
-		String line;
-		System.out.println("Podaj nazwê u¿ytkownika, do którego chcesz wys³aæ wiadomoœæ:");
-		if(input.hasNextLine()){
-			line = input.nextLine();
-			String userText;
-			System.out.println("Podaj treœæ wiadomoœci:");
-			if(input.hasNextLine()){
-				userText = input.nextLine();
-				try{
-					remoteObject.sendToFriend(userName, line, userText);
-				}
-				catch(RemoteException e){
-					e.printStackTrace();
-				}
-			}
+	public static void sendToFriend(String msg){
+		try{
+			remoteObject.sendToFriend(userName, msg);
+		}
+		catch(RemoteException e){
+			e.printStackTrace();
 		}
 	}
 
@@ -94,25 +89,6 @@ public class Client {
 					e.printStackTrace();
 				}
 			}
-		}
-	}
-
-	public void findUser(){
-		String line;
-		boolean bool = false;
-		System.out.println("Podaj nazwê u¿ytkownika, którego szukasz:");
-		if (input.hasNextLine()){
-			line = input.nextLine();
-			try {
-				bool = remoteObject.findUser(line);
-			}
-			catch(RemoteException e){
-				e.printStackTrace();
-			}
-			if (bool){
-				System.out.println("U¿ytkownik: " + line + " jest zalogowany!");
-			}
-			else System.out.println("U¿ytkownik: " + line + " nie jest zalogowany!");
 		}
 	}
 
@@ -178,20 +154,17 @@ public class Client {
 
 	public void loggedInLoop() throws RemoteException{
 		while(true){
-			System.out.print("Usage:\n\'a\' - dodaj do grupy\t\'f\' - znajdz u¿ytkownika"
+			System.out.print("U¿ytkowanie:\n\'a\' - dodaj do grupy\t\'f\' - znajdz u¿ytkownika"
 					+ "\t\'g\' - wyœlij do grupy\t\'i\' - iloœæ u¿ytkowników online\n"
 					+ "\'j\' - do³¹cz do grupy\t\'s\' - wyœlij wiadomoœæ\t\t\'q\' - wyjœcie");
 			line = input.nextLine();
-			if(!line.matches("[afgijsq]")){
+			if(!line.matches("[agijq]")){// bez 's'
 				System.out.println("Niepoprawna komenda!");
 				continue;
 			}
 			switch (line){
 			case "a":
 				addToGroup();
-				break;
-			case "f":
-				findUser();
 				break;
 			case "g":
 				sendToGroup();
@@ -202,14 +175,22 @@ public class Client {
 			case "j":
 				joinGroup();
 				break;
-			case "s":
-				sendToFriend();
-				break;
+//			case "s":
+//				sendToFriend();
+//				break;
 			case "q":
 				remoteObject.signOut(userName);
 				System.exit(1);
 				return;
 			}
 		}
+	}
+
+	public static String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 }

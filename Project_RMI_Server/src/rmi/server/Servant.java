@@ -53,20 +53,18 @@ public class Servant extends UnicastRemoteObject implements IChat{
 	}
 
 	// Implementacja funkcji sendToFriend() znajduj¹cej siê w interfejsie IChat
-	public boolean sendToFriend(String from, String to, String message) throws RemoteException {
+	public boolean sendToFriend(String from, String message) throws RemoteException {
+		// func param: String 'to' usuniête
 		ICallback icb = null;
 		for(User u : present.keySet()){
-			if(u.getNick().equals(to)){
-				icb = present.get(u);
+			icb = present.get(u);
+			if(icb != null){
+				icb.sendToFriend(from, message);
+				return true;
 			}
 		}
-		if(icb != null){
-			icb.sendToFriend(from, message);
-			System.out.println("Server.sendToFriend(): " + to + " otrzymuje wiadomoœæ: " 
-					+ message + " OD: " + from);
-			return true;
-		}		
-		return false;
+		System.out.println("Server.sendToFriend(): " + from + ": " + message);
+		return false;	
 	}
 
 	// Implementacja funkcji sendToGroup() znajduj¹cej siê w interfejsie IChat
