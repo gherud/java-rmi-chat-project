@@ -10,6 +10,7 @@ import java.util.Set;
 
 import rmi.common.ICallback;
 import rmi.common.IChat;
+import rmi.common.User;
 
 public class Servant extends UnicastRemoteObject implements IChat{
 
@@ -30,7 +31,7 @@ public class Servant extends UnicastRemoteObject implements IChat{
 		}
 		else{
 			for(User u : present.keySet()){
-				if(!u.getNick().equals(nick)){
+				if(!u.getUserName().equals(nick)){
 					present.put(user, icb);
 					System.out.println(com);
 					return true;
@@ -43,7 +44,7 @@ public class Servant extends UnicastRemoteObject implements IChat{
 	// Implementacja funkcji signOut() znajduj¹cej siê w interfejsie IChat
 	public boolean signOut(String nick) throws RemoteException {
 		for(User u : present.keySet()){
-			if(u.getNick().equals(nick)){
+			if(u.getUserName().equals(nick)){
 				present.remove(u);
 				System.out.println("Server.signOut(): " + nick);
 				return true;
@@ -91,7 +92,7 @@ public class Servant extends UnicastRemoteObject implements IChat{
 		Set<User> users = present.keySet();
 		List<String> list = new ArrayList<String>();
 		for(User s : users){
-			list.add(s.getNick());
+			list.add(s.getUserName());
 		}
 		if(list.contains(nick)){
 			System.out.println("Server.findUser(): " + nick);
@@ -106,7 +107,7 @@ public class Servant extends UnicastRemoteObject implements IChat{
 		Set<User> users = present.keySet();
 		List<String> list = new ArrayList<String>();
 		for(User s : users){
-			list.add(s.getNick());
+			list.add(s.getUserName());
 		}
 		return list;
 	}
@@ -114,7 +115,7 @@ public class Servant extends UnicastRemoteObject implements IChat{
 	// Implementacja funkcji joinGroup() znajduj¹cej siê w interfejsie IChat
 	public boolean joinGroup(String nick, String groupName){
 		for(User u : present.keySet()){
-			if(u.getNick().equals(nick)){
+			if(u.getUserName().equals(nick)){
 				u.setGroupName(groupName);
 				System.out.println("Server.joinGroup(): " + nick + " do³¹cza do grupy: " + groupName);
 				return true;
@@ -127,7 +128,7 @@ public class Servant extends UnicastRemoteObject implements IChat{
 	public boolean askIfAdd(String from, String to, String groupName) throws RemoteException{
 		ICallback cb = null;
 		for(User u : present.keySet()){
-			if(u.getNick().equals(to)){
+			if(u.getUserName().equals(to)){
 				cb = present.get(u);
 			}
 		}

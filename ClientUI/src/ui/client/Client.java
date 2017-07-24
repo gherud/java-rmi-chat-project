@@ -12,16 +12,17 @@ import javax.swing.JOptionPane;
 
 import rmi.common.ICallback;
 import rmi.common.IChat;
+import rmi.common.User;
 
 public class Client {
 
 	private Scanner input = new Scanner(System.in);
-//	String[] tab;
 	private static final String HOST = "localhost";
 	private static String userName;
 	String groupName, line;
 	static IChat remoteObject;
 	ICallback callback;
+	private static User user;
 
 	public static void main(String[] args) {
 		new Client();
@@ -30,13 +31,13 @@ public class Client {
 	public Client(){
 		// Okno dialogowe, w którym podajemy nazwê u¿ytkownika
 		do{
-			setUserName(JOptionPane.showInputDialog("Podaj nazwê u¿ytkownika:"));
-			if(userName == null){
+			user.setUserName(JOptionPane.showInputDialog("Podaj nazwê u¿ytkownika:"));
+			if(user.getUserName() == null){
 				System.exit(-1);
 			}
 
-		} while(userName.isEmpty() || userName == "");
-		groupName = "all";
+		} while(user.getUserName().isEmpty() || user.getUserName() == "");
+		user.setGroupName("all");
 
 		Registry reg;	//rejestr nazw obiektów
 		try{
@@ -46,8 +47,8 @@ public class Client {
 			remoteObject = (IChat) reg.lookup("ChatServer");
 			callback = new ClientCallback();
 			// wywolanie metod zdalnego obiektu
-			remoteObject.signUp(getUserName(), groupName, callback);
-			System.out.println("Twoja nazwa: " + userName + ", nazwa grupy: " + groupName);
+			remoteObject.signUp(user.getUserName(), user.getGroupName(), callback);
+			System.out.println("Twoja nazwa: " + user.getUserName() + ", nazwa grupy: " + user.getGroupName());
 			new Thread() {
 	            @Override
 	            public void run() {
@@ -66,7 +67,7 @@ public class Client {
 
 	public static void sendToFriend(String msg){
 		try{
-			remoteObject.sendToFriend(userName, msg);
+			remoteObject.sendToFriend(user.getUserName(), msg);
 		}
 		catch(RemoteException e){
 			e.printStackTrace();
@@ -184,13 +185,5 @@ public class Client {
 				return;
 			}
 		}
-	}
-
-	public static String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
 	}
 }
