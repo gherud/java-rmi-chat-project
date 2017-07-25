@@ -10,13 +10,13 @@ import javafx.scene.control.TextField;
 
 public class Controller {
 
-	@FXML private TextField msg = new TextField();
-	@FXML public TextArea chat = new TextArea();
+	@FXML private TextField msg;
+	@FXML private TextArea chat;
 	
 	@FXML
 	private void handleButtonAction(ActionEvent ev){
 		if(!msg.getText().isEmpty()){
-			Client.sendToFriend(msg.getText().toString(), chat);
+			Client.sendToFriend(msg.getText().toString());
 			System.out.println("new message: " + msg.getText().toString());
 //			chat.appendText("Ja: " + msg.getText().toString()+"\n");
 			msg.clear();
@@ -26,18 +26,14 @@ public class Controller {
 	@FXML
 	private void about(){
 		Alert alert = new Alert(AlertType.INFORMATION);
-		String title = "Informacja";
-		alert.setTitle(title);
+		alert.setTitle("Informacja");
 
-		String header = "Program utworzony przez Grzegorza Herud na potrzeby pracy magisterskiej";
-		alert.setHeaderText(header);
+		alert.setHeaderText("Program utworzony przez Grzegorza Herud na potrzeby pracy magisterskiej");
 
-		String desc = "Promotor: "
+		alert.setContentText("Promotor: "
 				+ "dr in¿. Lucjan Miêkina\n\nTytu³ pracy: \"System do ci¹g³ej integracji "
 				+ "oprogramowania, zbudowany z u¿yciem œrodowiska Eclipse, Git"
-				+ "i Jenkins\"";
-		alert.setContentText(desc);
-
+				+ "i Jenkins\"");
 		alert.show();
 	}
 	
@@ -45,8 +41,8 @@ public class Controller {
 	private void close(){
 		Platform.exit();
 	}
-
-	public TextArea getChatText() {
+	
+	public TextArea getTextArea(){
 		return chat;
 	}
 }

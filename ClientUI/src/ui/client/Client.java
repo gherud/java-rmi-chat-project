@@ -10,7 +10,6 @@ import java.util.Scanner;
 
 import javax.swing.JOptionPane;
 
-import javafx.scene.control.TextArea;
 import rmi.common.ICallback;
 import rmi.common.IChat;
 import rmi.common.User;
@@ -66,9 +65,9 @@ public class Client {
 		}
 	}
 
-	public static void sendToFriend(String msg, TextArea ta){
+	public static void sendToFriend(String msg){
 		try{
-			remoteObject.sendToFriend(user.getUserName(), msg, ta);
+			remoteObject.sendToFriend(user.getUserName(), msg);
 		}
 		catch(RemoteException e){
 			e.printStackTrace();
