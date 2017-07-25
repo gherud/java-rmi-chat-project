@@ -4,6 +4,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Scanner;
 
+import javafx.scene.control.TextArea;
 import rmi.common.ICallback;
 
 public class ClientCallback extends UnicastRemoteObject implements ICallback {
@@ -15,7 +16,8 @@ public class ClientCallback extends UnicastRemoteObject implements ICallback {
 		super();
 	}
 
-	public void sendToFriend(String from, String msg) throws RemoteException {
+	public void sendToFriend(String from, String msg, TextArea ta) throws RemoteException {
+		ta.appendText(msg);
 		System.out.println("\n" + from + ": " + msg + "\tNOWA WIADOMOŒÆ");		
 	}
 

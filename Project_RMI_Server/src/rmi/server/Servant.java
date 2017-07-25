@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javafx.scene.control.TextArea;
 import rmi.common.ICallback;
 import rmi.common.IChat;
 import rmi.common.User;
@@ -17,8 +18,7 @@ public class Servant extends UnicastRemoteObject implements IChat{
 	private static final long serialVersionUID = 5562295031945189580L;
 	private Map<User, ICallback> present = new HashMap<User, ICallback>();
 
-	public Servant() throws RemoteException{
-	}
+	public Servant() throws RemoteException{}
 
 	// Implementacja funkcji signUp() znajduj¹cej siê w interfejsie IChat
 	public boolean signUp(String nick, String groupName, ICallback icb) throws RemoteException {
@@ -54,13 +54,13 @@ public class Servant extends UnicastRemoteObject implements IChat{
 	}
 
 	// Implementacja funkcji sendToFriend() znajduj¹cej siê w interfejsie IChat
-	public boolean sendToFriend(String from, String message) throws RemoteException {
+	public boolean sendToFriend(String from, String message, TextArea ta) throws RemoteException {
 		// func param: String 'to' usuniête
 		ICallback icb = null;
 		for(User u : present.keySet()){
 			icb = present.get(u);
 			if(icb != null){
-				icb.sendToFriend(from, message);
+				icb.sendToFriend(from, message, ta);
 				return true;
 			}
 		}

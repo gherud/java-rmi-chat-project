@@ -4,6 +4,8 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
 
+import javafx.scene.control.TextArea;
+
 public interface IChat extends Remote{
 	boolean signUp(String nick, String groupName, ICallback icb) throws RemoteException;
 	boolean signOut(String nick) throws RemoteException;
@@ -12,7 +14,7 @@ public interface IChat extends Remote{
 	 * @param to - odbiorca wiadomoœci
 	 * @param message - treœæ wiadomoœci
 	 */
-	boolean sendToFriend(String from, String message) throws RemoteException;	// deleted: String to
+	boolean sendToFriend(String from, String message, TextArea ta) throws RemoteException;	// deleted: String to
 	/**
 	 * 
 	 * @param from - adresat wiadomoœci

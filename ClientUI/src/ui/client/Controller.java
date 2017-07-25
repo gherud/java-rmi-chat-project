@@ -16,9 +16,9 @@ public class Controller {
 	@FXML
 	private void handleButtonAction(ActionEvent ev){
 		if(!msg.getText().isEmpty()){
-			Client.sendToFriend(msg.getText().toString());
+			Client.sendToFriend(msg.getText().toString(), chat);
 			System.out.println("new message: " + msg.getText().toString());
-			chat.appendText("Ja: " + msg.getText().toString()+"\n");
+//			chat.appendText("Ja: " + msg.getText().toString()+"\n");
 			msg.clear();
 		}
 	}
