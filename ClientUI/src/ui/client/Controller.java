@@ -18,7 +18,7 @@ public class Controller {
 		if(!msg.getText().isEmpty()){
 			Client.sendToFriend(msg.getText().toString());
 			System.out.println("new message: " + msg.getText().toString());
-//			chat.appendText("Ja: " + msg.getText().toString()+"\n");
+			chat.appendText("Ja: " + msg.getText().toString()+"\n");
 			msg.clear();
 		}
 	}
@@ -42,7 +42,15 @@ public class Controller {
 		Platform.exit();
 	}
 	
-	public TextArea getTextArea(){
+	public boolean appendText(String txt){
+		if(!txt.isEmpty()){
+			chat.appendText(txt);
+			return true;
+		}
+		return false;
+	}
+	
+	public TextArea getChatArea(){
 		return chat;
 	}
 }

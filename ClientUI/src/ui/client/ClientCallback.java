@@ -1,10 +1,12 @@
 package ui.client;
 
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Scanner;
 
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import rmi.common.ICallback;
 
 public class ClientCallback extends UnicastRemoteObject implements ICallback {
@@ -17,14 +19,22 @@ public class ClientCallback extends UnicastRemoteObject implements ICallback {
 	}
 
 	public void sendToFriend(String from, String msg) throws RemoteException {
-		FXMLLoader fxml = new FXMLLoader(Controller.class.getClass().getResource("UI.fxml"));
+		FXMLLoader fxml = new FXMLLoader(Controller.class.getResource("ui.fxml"));
+		@SuppressWarnings("unused")
+		Parent root = null;
+		try {
+			root = fxml.load();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		Controller ctrl = fxml.getController();
-		ctrl.getTextArea().appendText(msg);
-		
-		System.out.println("\n" + from + ": " + msg + "\tNOWA WIADOMOŒÆ");		
+		ctrl.appendText(msg);
+		System.out.println("Message from TextArea: " + ctrl.getChatArea().getText());
 	}
 
 	public void sendToGroup(String nick, String grpName, String message) throws RemoteException {
+		
 		System.out.println("\nWiadomoœæ do grupy: " + grpName + " od u¿ytkownika " + 
 				nick + ":\t" + message);
 	}

@@ -36,7 +36,7 @@ public class Client {
 				System.exit(-1);
 			}
 
-		} while(userName.isEmpty() || userName == "");
+		} while(userName.isEmpty() || !userName.matches(".*\\w.*"));
 		user = new User(userName, "all");
 
 		Registry reg;	//rejestr nazw obiektów
@@ -157,7 +157,7 @@ public class Client {
 		while(true){
 			System.out.print("U¿ytkowanie:\n\'a\' - dodaj do grupy\t\'f\' - znajdz u¿ytkownika"
 					+ "\t\'g\' - wyœlij do grupy\t\'i\' - iloœæ u¿ytkowników online\n"
-					+ "\'j\' - do³¹cz do grupy\t\'s\' - wyœlij wiadomoœæ\t\t\'q\' - wyjœcie");
+					+ "\'j\' - do³¹cz do grupy\t\'s\' - wyœlij wiadomoœæ\t\t\'q\' - wyjœcie\n");
 			line = input.nextLine();
 			if(!line.matches("[agijq]")){// bez 's'
 				System.out.println("Niepoprawna komenda!");
