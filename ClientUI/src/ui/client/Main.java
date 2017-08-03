@@ -17,8 +17,8 @@ public class Main extends Application {
 			Parent root = FXMLLoader.load(getClass().getResource("UI.fxml"));
 			Scene scene = new Scene(root);
 			primaryStage.setScene(scene);
+			primaryStage.setTitle("Jesteœ zalogowany jako: " + Client.user.getUserName());
 			primaryStage.setOnCloseRequest(e -> Platform.exit());
-			primaryStage.setTitle("Logged in as: " + Client.user.getUserName());
 			primaryStage.setResizable(false);
 			primaryStage.show();
 		} catch(Exception e) {

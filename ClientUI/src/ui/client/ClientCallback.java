@@ -30,26 +30,25 @@ public class ClientCallback extends UnicastRemoteObject implements ICallback {
 		}
 		Controller ctrl = fxml.getController();
 		ctrl.appendText(msg);
-		System.out.println("Message from TextArea: " + ctrl.getChatArea().getText());
 	}
 
-	public void sendToGroup(String nick, String grpName, String message) throws RemoteException {
-		
-		System.out.println("\nWiadomoœæ do grupy: " + grpName + " od u¿ytkownika " + 
-				nick + ":\t" + message);
-	}
+//	public void sendToGroup(String nick, String grpName, String message) throws RemoteException {
+//		
+//		System.out.println("\nWiadomoœæ do grupy: " + grpName + " od u¿ytkownika " + 
+//				nick + ":\t" + message);
+//	}
 
-	public boolean askIfAdd(String nick, String group){
-		String line;
-		System.out.println("\nU¿ytkownik " + nick + " zaprasza Ciê do grupy: " + group
-				+ "\nWpisz \"t\" lub \"tak\", aby zaakceptowaæ proœbê.");
-		if(input.hasNextLine()){
-			line = input.nextLine();
-			if(line.equals("t") || line.equals("tak")){
-				System.out.println("\nZosta³eœ pomyœlnie dodany do grupy: " + group);
-				return true;
-			}
-		}
-		return false;
-	}
+//	public boolean askIfAdd(String nick, String group){
+//		String line;
+//		System.out.println("\nU¿ytkownik " + nick + " zaprasza Ciê do grupy: " + group
+//				+ "\nWpisz \"t\" lub \"tak\", aby zaakceptowaæ proœbê.");
+//		if(input.hasNextLine()){
+//			line = input.nextLine();
+//			if(line.equals("t") || line.equals("tak")){
+//				System.out.println("\nZosta³eœ pomyœlnie dodany do grupy: " + group);
+//				return true;
+//			}
+//		}
+//		return false;
+//	}
 }

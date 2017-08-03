@@ -4,8 +4,6 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 import javax.swing.JOptionPane;
@@ -24,7 +22,7 @@ public class Client {
 	ICallback callback;
 	static User user;
 
-	public static void main(String[] args) {
+	public static void main(String[] args){
 		new Client();
 	}
 
@@ -38,7 +36,7 @@ public class Client {
 
 		} while(userName.isEmpty() || !userName.matches(".*\\w.*"));
 		user = new User(userName, "all");
-
+		
 		Registry reg;	//rejestr nazw obiektów
 		try{
 			// pobranie referencji do rejestru nazw obiektow
@@ -74,84 +72,83 @@ public class Client {
 		}
 	}
 
-	public void sendToGroup(){
-		String line;
-		System.out.println("Podaj nazwê grupy, do której chcesz wys³aæ wiadomoœæ:");
-		if(input.hasNextLine()){
-			line = input.nextLine();
-			String groupText;
-			System.out.println("Podaj treœæ wiadomoœci:");
-			if(input.hasNextLine()){
-				groupText = input.nextLine();
-				try{
-					remoteObject.sendToGroup(userName, line, groupText);
-				}
-				catch(RemoteException e){
-					e.printStackTrace();
-				}
-			}
-		}
-	}
+//	public void sendToGroup(){
+//		String line;
+//		System.out.println("Podaj nazwê grupy, do której chcesz wys³aæ wiadomoœæ:");
+//		if(input.hasNextLine()){
+//			line = input.nextLine();
+//			String groupText;
+//			System.out.println("Podaj treœæ wiadomoœci:");
+//			if(input.hasNextLine()){
+//				groupText = input.nextLine();
+//				try{
+//					remoteObject.sendToGroup(userName, line, groupText);
+//				}
+//				catch(RemoteException e){
+//					e.printStackTrace();
+//				}
+//			}
+//		}
+//	}
 
-	public void information(){
-		List<String> list = new ArrayList<String>();
-		try{
-			list = remoteObject.information();
-		}
-		catch(RemoteException e){
-			e.printStackTrace();
-		}
-		if(list.size() == 1){
-			System.out.println("Zalogowany jest " + list.size() + " u¿ytkownik:");
-		}
-		else if(list.size() > 1){
-			System.out.println("Zalogowanych jest " + list.size() + " u¿ytkowników:");
-		}
-		for(String s : list){
-			System.out.println(" - " + s);
-		}
-	}
+//	public void information(){
+//		List<String> list = new ArrayList<String>();
+//		try{
+//			list = remoteObject.information();
+//		}
+//		catch(RemoteException e){
+//			e.printStackTrace();
+//		}
+//		if(list.size() == 1){
+//			System.out.println("Zalogowany jest " + list.size() + " u¿ytkownik:");
+//		}
+//		else if(list.size() > 1){
+//			System.out.println("Zalogowanych jest " + list.size() + " u¿ytkowników:");
+//		}
+//		for(String s : list){
+//			System.out.println(" - " + s);
+//		}
+//	}
 
-	public void joinGroup(){
-		boolean added = false;
-		System.out.println("Podaj nazwê grupy do której chcesz do³¹czyæ: ");
-		if(input.hasNextLine()){
-			line = input.nextLine();
-			try{
-				added = remoteObject.joinGroup(userName, line);
-			}
-			catch(RemoteException e){
-				e.printStackTrace();
-			}
-			if(added){
-				System.out.println("Zosta³eœ dodany do grupy " + line);
-			}
-			else{
-				System.out.println("Dodanie do grupy: " + line + " nie powiod³o siê!");
-			}
-		}
-	}
+//	public void joinGroup(){
+//		boolean added = false;
+//		System.out.println("Podaj nazwê grupy do której chcesz do³¹czyæ: ");
+//		if(input.hasNextLine()){
+//			line = input.nextLine();
+//			try{
+//				added = remoteObject.joinGroup(userName, line);
+//			}
+//			catch(RemoteException e){
+//				e.printStackTrace();
+//			}
+//			if(added){
+//				System.out.println("Zosta³eœ dodany do grupy " + line);
+//			}
+//			else{
+//				System.out.println("Dodanie do grupy: " + line + " nie powiod³o siê!");
+//			}
+//		}
+//	}
 
-	public void addToGroup(){
-		String nick;
-		boolean bool = false;
-		System.out.println("Podaj nazwê u¿ytkownika, którego chcesz dodaæ do grupy " + groupName);
-		if(input.hasNextLine()){
-			nick = input.nextLine();
-			try{
-				bool = remoteObject.askIfAdd(userName, nick, groupName);
-			}
-			catch(RemoteException e){
-				e.printStackTrace();
-			}
-			if(bool){
-				System.out.println("U¿ytkownik "+nick+" zosta³ pomyœlnie dodany do grupy " + groupName);
-			}
-			else System.out.println("Dodanie u¿ytkownika "+nick+" do grupy " + groupName 
-					+ " nie powiod³o siê, lub u¿ytkownik odrzuci³ zaproszenie.");
-		}
-
-	}
+//	public void addToGroup(){
+//		String nick;
+//		boolean bool = false;
+//		System.out.println("Podaj nazwê u¿ytkownika, którego chcesz dodaæ do grupy " + groupName);
+//		if(input.hasNextLine()){
+//			nick = input.nextLine();
+//			try{
+//				bool = remoteObject.askIfAdd(userName, nick, groupName);
+//			}
+//			catch(RemoteException e){
+//				e.printStackTrace();
+//			}
+//			if(bool){
+//				System.out.println("U¿ytkownik "+nick+" zosta³ pomyœlnie dodany do grupy " + groupName);
+//			}
+//			else System.out.println("Dodanie u¿ytkownika "+nick+" do grupy " + groupName 
+//					+ " nie powiod³o siê, lub u¿ytkownik odrzuci³ zaproszenie.");
+//		}
+//	}
 
 	public void loggedInLoop() throws RemoteException{
 		while(true){
@@ -164,18 +161,18 @@ public class Client {
 				continue;
 			}
 			switch (line){
-			case "a":
-				addToGroup();
-				break;
-			case "g":
-				sendToGroup();
-				break;
-			case "i":
-				information();
-				break;
-			case "j":
-				joinGroup();
-				break;
+//			case "a":
+//				addToGroup();
+//				break;
+//			case "g":
+//				sendToGroup();
+//				break;
+//			case "i":
+//				information();
+//				break;
+//			case "j":
+//				joinGroup();
+//				break;
 //			case "s":
 //				sendToFriend();
 //				break;

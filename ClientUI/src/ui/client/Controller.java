@@ -12,11 +12,13 @@ public class Controller {
 
 	@FXML private TextField msg;
 	@FXML private TextArea chat;
+	private String data;
 	
 	@FXML
 	private void handleButtonAction(ActionEvent ev){
 		if(!msg.getText().isEmpty()){
-			Client.sendToFriend(msg.getText().toString());
+//			Client.sendToFriend(msg.getText().toString());
+			data = msg.getText().toString();
 			System.out.println("new message: " + msg.getText().toString());
 			chat.appendText("Ja: " + msg.getText().toString()+"\n");
 			msg.clear();
@@ -52,5 +54,9 @@ public class Controller {
 	
 	public TextArea getChatArea(){
 		return chat;
+	}
+	
+	public String sendData(){
+		return data;
 	}
 }
