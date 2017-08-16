@@ -32,7 +32,7 @@ public class ChatUI extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		Platform.setImplicitExit(false);
+//		Platform.setImplicitExit(false);
 		this.dialog();
 		this.setupNewStage(stage);
 	}
@@ -111,7 +111,7 @@ public class ChatUI extends Application {
 		this.input = new TextField();
 		input.setPrefWidth(535);
 		input.setOnAction(e -> {
-			if(!input.getText().isEmpty()){//sprawdzenie czy pole tekstowe zawiera tekst
+			if(!input.getText().isEmpty()){			//sprawdzenie czy pole tekstowe zawiera tekst
 				client.sendMessage(input.getText());
 				input.setText("");
 			}
@@ -158,10 +158,6 @@ public class ChatUI extends Application {
 		System.exit(0);
 	}
 
-	public static void main(String[] args) {
-		Application.launch(args);
-	}
-
 	public void sendMessage(String message) {
 		Platform.runLater(() -> ChatUI.this.display.appendText("\n" + message));
 	}
@@ -173,5 +169,9 @@ public class ChatUI extends Application {
 			FXCollections.sort(list);
 			this.userList.setItems(list);
 		});
+	}
+
+	public static void main(String[] args) {
+		Application.launch(args);
 	}
 }
