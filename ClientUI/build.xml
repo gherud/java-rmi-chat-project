@@ -66,7 +66,6 @@
         <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
             <src path="src"/>
             <classpath refid="ClientUI.classpath"/>
-        	<classpath refid="JUnit 4.libraryclasspath"/>
         </javac>
     </target>
     <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
@@ -115,7 +114,7 @@
         <mkdir dir="${junit.output.dir}"/>
         <junit fork="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
-            <test name="test.ClientImplTest" todir="${junit.output.dir}"/>
+            <test name="ui.client.test.ClientImplTest" todir="${junit.output.dir}"/>
             <jvmarg line="-ea"/>
             <classpath refid="ClientUI.classpath"/>
         </junit>
