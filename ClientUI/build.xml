@@ -41,14 +41,6 @@
             </fileset>
         </copy>
     </target>
-    <junit printsummary="yes" haltonfailure="yes">
-        <classpath>
-            <path refid="your.classpath.refid" />
-       		<fileset dir="${junit.dir}">
-        	    <include name="**/junit.jar" />
-        	</fileset>
-     	</classpath>
-    </junit>
     <target name="clean">
         <delete dir="bin"/>
     </target>
@@ -74,6 +66,7 @@
         <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
             <src path="src"/>
             <classpath refid="ClientUI.classpath"/>
+        	<classpath refid="JUnit 4.libraryclasspath"/>
         </javac>
     </target>
     <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
