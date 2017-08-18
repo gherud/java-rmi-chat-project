@@ -18,10 +18,6 @@
     <path id="RMI-Common.classpath">
         <pathelement location="${RMI-Common.location}/bin"/>
     </path>
-    <path id="JUnit 4.libraryclasspath">
-        <pathelement location="../../../../Users/herud/.p2/pool/plugins/org.junit_4.12.0.v201504281640/junit.jar"/>
-        <pathelement location="../../../../Users/herud/.p2/pool/plugins/org.hamcrest.core_1.3.0.v201303031735.jar"/>
-    </path>
     <path id="RMI-Server.classpath">
         <pathelement location="${RMI-Server.location}/bin"/>
         <path refid="RMI-Common.classpath"/>
@@ -30,8 +26,9 @@
         <pathelement location="bin"/>
         <path refid="JavaFX SDK.libraryclasspath"/>
         <path refid="RMI-Common.classpath"/>
-        <path refid="JUnit 4.libraryclasspath"/>
         <path refid="RMI-Server.classpath"/>
+        <pathelement location="Libraries/hamcrest-core-1.3.jar"/>
+        <pathelement location="Libraries/junit-4.12.jar"/>
     </path>
     <target name="init">
         <mkdir dir="bin"/>
@@ -114,7 +111,7 @@
         <mkdir dir="${junit.output.dir}"/>
         <junit fork="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
-            <test name="ui.client.test.ClientImplTest" todir="${junit.output.dir}"/>
+            <test name="test.ClientImplTest" todir="${junit.output.dir}"/>
             <jvmarg line="-ea"/>
             <classpath refid="ClientUI.classpath"/>
         </junit>

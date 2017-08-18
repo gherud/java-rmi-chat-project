@@ -1,4 +1,4 @@
-package ui.client.test;
+package test;
 
 import java.net.MalformedURLException;
 import java.rmi.AlreadyBoundException;
