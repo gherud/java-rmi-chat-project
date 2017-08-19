@@ -3,10 +3,9 @@ package rmi.common;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-/** Interfejs udostepniajacy metody dla Chatu
- * @author herud
- */
-public interface Chat extends Remote{	
+/** Interfejs udostepniajacy metody dla Chatu */
+public interface Chat extends Remote {
+	
 	public static final String DEFAULT_NAME = "ChatClient";
 
 	// Lista uzytkownikow

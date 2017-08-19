@@ -9,22 +9,20 @@ import java.rmi.server.UnicastRemoteObject;
 import rmi.common.Chat;
 import rmi.common.Server;
 
-/** Implementacja interfejsu Chat.java
- * @author herud
- */
+/** Implementacja interfejsu Chat.java */
 public class ClientImpl extends UnicastRemoteObject implements Chat {
+	
 	private String name;
 	private Server server;
 	private static final long serialVersionUID = 1L;
-	private ChatUI gui;
+	private ChatUI chat;
 
-	public ClientImpl(ChatUI gui) throws RemoteException, MalformedURLException, NotBoundException {
+	public ClientImpl(ChatUI chat) throws RemoteException, MalformedURLException, NotBoundException {
 		super();
-		this.gui = gui;
+		this.chat = chat;
 		server = (Server) Naming.lookup("rmi://127.0.0.1/" + Server.DEFAULT_NAME);
 	}
 
-	// Dodawanie nowego uzytkownika
 	public boolean isNicknameOkay(String name) throws RemoteException {
 		if(server.logIn(name)) {
 			server.addUser(name, this);
@@ -36,12 +34,12 @@ public class ClientImpl extends UnicastRemoteObject implements Chat {
 
 	@Override
 	public void sendUserList(String[] userList) throws RemoteException {
-		gui.newUserList(userList);
+		chat.newUserList(userList);
 	}
 
 	@Override
 	public void receiveMessage(String message) {
-		gui.sendMessage(message);
+		chat.sendMessage(message);
 	}
 
 	public void sendMessage(String message) {

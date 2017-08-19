@@ -3,9 +3,7 @@ package rmi.common;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-/** Interfejs udostepniajacy metody dla Serwera
- * @author herud
- */
+/** Interfejs udostepniajacy metody dla Serwera */
 public interface Server extends Remote{
 	public static final String DEFAULT_NAME = "ChatServer";
 	

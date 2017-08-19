@@ -43,12 +43,6 @@ public class ServerRunnable extends UnicastRemoteObject implements Server {
 		this.sendUserListToClients();
 	}
 
-	@Override
-	public synchronized void logOut(String name) {
-		this.user.remove(name);
-		this.sendUserListToClients();
-	}
-
 	public synchronized void sendUserListToClients() {
 		while (!this.iterateForUserList());
 	}
@@ -82,5 +76,11 @@ public class ServerRunnable extends UnicastRemoteObject implements Server {
 		if(bool) {
 			this.sendUserListToClients();
 		}
+	}
+	
+	@Override
+	public synchronized void logOut(String name) {
+		this.user.remove(name);
+		this.sendUserListToClients();
 	}
 }

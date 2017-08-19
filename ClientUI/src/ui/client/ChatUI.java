@@ -26,19 +26,21 @@ public class ChatUI extends Application {
 
 	private ListView<String> userList;
 	private TextArea display;
-	private TextField input;
 	private ClientImpl client;
-	private Button btn;
 
+	public static void main(String[] args) {
+		Application.launch(args);
+	}
+	
 	@Override
 	public void start(Stage stage) throws Exception {
 //		Platform.setImplicitExit(false);
-		this.dialog();
+		this.inputName();
 		this.setupNewStage(stage);
 	}
 
 	// OKNO S£U¯¥CE DO WPROWADZANIA NAZWY U¯YTKOWNIKA ORAZ SPRAWDZAJ¥CE POPRAWNOŒÆ
-	private void dialog() {
+	private void inputName() {
 		boolean loop = false;
 		while(!loop) {
 			TextInputDialog dialog = this.createTextInputDialog();
@@ -62,7 +64,7 @@ public class ChatUI extends Application {
 		this.closeThis();
 	}
 
-	// Funkcja sprawdzajaca poprawnosc nicku
+	// Funkcja sprawdzajaca poprawnosc i dostepnosc nazwy
 	private boolean isNicknameOkay(String s) {
 		boolean b = false;
 		try {
@@ -97,7 +99,7 @@ public class ChatUI extends Application {
 				this.client = new ClientImpl(this);
 			}
 		catch (RemoteException e) {
-			this.connectionError("RemoteException - Serwer nie jest w³¹czony.");
+			this.connectionError("Aby móc korzystaæ z chatu najpierw w³¹cz Server");
 			this.closeThis();
 		}
 		catch (MalformedURLException | NotBoundException e) {
@@ -106,9 +108,22 @@ public class ChatUI extends Application {
 		}
 	}
 
+	public void sendMessage(String message) {
+		Platform.runLater(() -> ChatUI.this.display.appendText("\n" + message));
+	}
+
+	public void newUserList(String[] userList2) {
+		Platform.runLater(() -> {
+			this.userList.setItems(null);
+			ObservableList<String> list = FXCollections.observableArrayList(userList2);
+			FXCollections.sort(list);
+			this.userList.setItems(list);
+		});
+	}
+
 	private void setupNewStage(Stage stage) {
 		// POLE DO WPISYWANIA WIADOMOŒCI
-		this.input = new TextField();
+		TextField input = new TextField();
 		input.setPrefWidth(535);
 		input.setOnAction(e -> {
 			if(!input.getText().isEmpty()){			//sprawdzenie czy pole tekstowe zawiera tekst
@@ -126,7 +141,7 @@ public class ChatUI extends Application {
 		display.prefWidth(400.0);
 		display.setEditable(false);
 		// PRZYCISK DO WYSY£ANIA WIADOMOŒCI
-		this.btn = new Button("Wyœlij");
+		Button btn = new Button("Wyœlij");
 		btn.setPrefWidth(75);
 		btn.setOnAction(e -> {
 			if(!input.getText().isEmpty()){//sprawdzenie czy pole tekstowe zawiera tekst
@@ -137,8 +152,8 @@ public class ChatUI extends Application {
 		// ---------- TWORZENIE SCENY ----------
 		BorderPane root = new BorderPane();
 		GridPane bottomRoot = new GridPane();
-		bottomRoot.add(this.input, 0, 0);
-		bottomRoot.add(this.btn, 1, 0);
+		bottomRoot.add(input, 0, 0);
+		bottomRoot.add(btn, 1, 0);
 		root.setLeft(this.display);
 		root.setRight(this.userList);
 		root.setBottom(bottomRoot);
@@ -156,22 +171,5 @@ public class ChatUI extends Application {
 	private void closeThis() {
 		Platform.exit();
 		System.exit(0);
-	}
-
-	public void sendMessage(String message) {
-		Platform.runLater(() -> ChatUI.this.display.appendText("\n" + message));
-	}
-
-	public void newUserList(String[] userList2) {
-		Platform.runLater(() -> {
-			this.userList.setItems(null);
-			ObservableList<String> list = FXCollections.observableArrayList(userList2);
-			FXCollections.sort(list);
-			this.userList.setItems(list);
-		});
-	}
-
-	public static void main(String[] args) {
-		Application.launch(args);
 	}
 }

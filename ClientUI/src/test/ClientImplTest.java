@@ -21,10 +21,10 @@ public class ClientImplTest {
 
 	static ClientImpl user1Impl;	// USER #1
 	static ClientImpl user2Impl;	// USER #2
+	String[] userList = {"User1", "User2", "User3"};
 
 	/**Przed testem nale¿y uruchomiæ Server oraz utworzyæ nowych u¿ytkowników,
-	 * którzy pos³u¿¹ do przeprowadzenia testów
-	 */
+	 * którzy pos³u¿¹ do przeprowadzenia testów */
 	@BeforeClass
 	public static void setUpBefore() throws RemoteException, MalformedURLException, NotBoundException,
 	AlreadyBoundException, InterruptedException {
@@ -35,25 +35,40 @@ public class ClientImplTest {
 		user1Impl = new ClientImpl(new ChatUI());
 		user2Impl = new ClientImpl(new ChatUI());
 	}
-	
+
+	/** Test funkcji sprawdzaj¹cej dostêpnoœæ nicku podczas logowania do chatu */
 	@Test
 	public void testIsNicknameOkay() {
 		new Thread(() -> {
 			try {
 				user1Impl.isNicknameOkay("User1");
 				user2Impl.isNicknameOkay("User2");
-			} catch (RemoteException e) {
-				e.printStackTrace();
+			} catch (RemoteException re) {
+				re.printStackTrace();
+			}
+		});
+	}
+	
+	/** Test funkcji aktualizuj¹cej listê zalogowanych u¿ytkowników */
+	@Test
+	public void testSendUserList() {
+		new Thread(() -> {
+			try{
+				user1Impl.sendUserList(userList);
+			} catch (RemoteException re) {
+				re.printStackTrace();
 			}
 		});
 	}
 
+	/** Sprawdzenie czy wysy³anie wiadomoœci jest mo¿liwe */
 	@Test
 	public void testSendMessage() {
 		user1Impl.sendMessage("Wiadomoœæ od u¿ytkownika 1");
 		user2Impl.sendMessage("Wiadomoœæ od u¿ytkownika 2");
 	}
 
+	/** wylogowanie obu u¿ytkowników */
 	@AfterClass
 	public static void tearDownAfter() {
 		user1Impl.logout();
