@@ -19,11 +19,12 @@ import ui.client.ClientImpl;
 
 public class ClientImplTest {
 
-	static ChatUI user1;
 	static ClientImpl user1Impl;	// USER #1
-	static ChatUI user2;
 	static ClientImpl user2Impl;	// USER #2
 
+	/**Przed testem nale¿y uruchomiæ Server oraz utworzyæ nowych u¿ytkowników,
+	 * którzy pos³u¿¹ do przeprowadzenia testów
+	 */
 	@BeforeClass
 	public static void setUpBefore() throws RemoteException, MalformedURLException, NotBoundException,
 	AlreadyBoundException, InterruptedException {
@@ -31,8 +32,8 @@ public class ClientImplTest {
 		Naming.bind(Server.DEFAULT_NAME, new ServerRunnable());
 		Thread.sleep(100);
 
-		user1Impl = new ClientImpl(user1 = new ChatUI());
-		user2Impl = new ClientImpl(user2 = new ChatUI());
+		user1Impl = new ClientImpl(new ChatUI());
+		user2Impl = new ClientImpl(new ChatUI());
 	}
 	
 	@Test
@@ -46,7 +47,6 @@ public class ClientImplTest {
 			}
 		});
 	}
-
 
 	@Test
 	public void testSendMessage() {
