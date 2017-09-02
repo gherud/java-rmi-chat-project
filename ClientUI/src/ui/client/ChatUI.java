@@ -31,19 +31,21 @@ public class ChatUI extends Application {
 	public static void main(String[] args) {
 		Application.launch(args);
 	}
-	
+
 	@Override
 	public void start(Stage stage) throws Exception {
-//		Platform.setImplicitExit(false);
 		this.inputName();
 		this.setupNewStage(stage);
 	}
 
-	// OKNO S£U¯¥CE DO WPROWADZANIA NAZWY U¯YTKOWNIKA ORAZ SPRAWDZAJ¥CE POPRAWNOŒÆ
 	private void inputName() {
 		boolean loop = false;
 		while(!loop) {
-			TextInputDialog dialog = this.createTextInputDialog();
+			TextInputDialog dialog = new TextInputDialog();
+			dialog.setTitle("WprowadŸ nazwê u¿ytkownika");
+			dialog.setHeaderText("");
+			dialog.setContentText("Nazwa u¿ytkownika:");
+			dialog.initModality(Modality.APPLICATION_MODAL);
 			Optional<String> result = dialog.showAndWait();
 			String errorMessage = "";
 			if(!result.isPresent()) {
@@ -64,7 +66,6 @@ public class ChatUI extends Application {
 		this.closeThis();
 	}
 
-	// Funkcja sprawdzajaca poprawnosc i dostepnosc nazwy
 	private boolean isNicknameOkay(String s) {
 		boolean b = false;
 		try {
@@ -75,15 +76,6 @@ public class ChatUI extends Application {
 					+ "Spróbuj ponownie!");
 		}
 		return b;
-	}
-
-	private TextInputDialog createTextInputDialog() {
-		TextInputDialog dialog = new TextInputDialog();
-		dialog.setTitle("Wprowadz nazwê u¿ytkownika");
-		dialog.setHeaderText("");
-		dialog.setContentText("Nazwa u¿ytkownika:");
-		dialog.initModality(Modality.APPLICATION_MODAL);
-		return dialog;
 	}
 
 	private void connectionError(String message) {
@@ -99,7 +91,7 @@ public class ChatUI extends Application {
 				this.client = new ClientImpl(this);
 			}
 		catch (RemoteException e) {
-			this.connectionError("Aby móc korzystaæ z chatu najpierw w³¹cz Server");
+			this.connectionError("Korzystanie z czatu jest mo¿liwe tylko przy w³¹czonym Serwerze!");
 			this.closeThis();
 		}
 		catch (MalformedURLException | NotBoundException e) {
@@ -122,34 +114,29 @@ public class ChatUI extends Application {
 	}
 
 	private void setupNewStage(Stage stage) {
-		// POLE DO WPISYWANIA WIADOMOŒCI
 		TextField input = new TextField();
 		input.setPrefWidth(535);
 		input.setOnAction(e -> {
-			if(!input.getText().isEmpty()){			//sprawdzenie czy pole tekstowe zawiera tekst
+			if(!input.getText().isEmpty()){
 				client.sendMessage(input.getText());
 				input.setText("");
 			}
 		});
-		// LISTA ZALOGOWANYCH U¯YTKOWNIKÓW
 		this.userList = new ListView<String>();
 		userList.setMinWidth(200.0);
-		// OKNO CHATU
 		this.display = new TextArea();
 		display.prefHeight(300.0);
 		display.setStyle("-fx-text-fill: black; -fx-font-size: 12;");
 		display.prefWidth(400.0);
 		display.setEditable(false);
-		// PRZYCISK DO WYSY£ANIA WIADOMOŒCI
 		Button btn = new Button("Wyœlij");
 		btn.setPrefWidth(75);
 		btn.setOnAction(e -> {
-			if(!input.getText().isEmpty()){//sprawdzenie czy pole tekstowe zawiera tekst
+			if(!input.getText().isEmpty()){
 				client.sendMessage(input.getText());
 				input.setText("");
 			}
 		});
-		// ---------- TWORZENIE SCENY ----------
 		BorderPane root = new BorderPane();
 		GridPane bottomRoot = new GridPane();
 		bottomRoot.add(input, 0, 0);

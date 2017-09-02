@@ -9,9 +9,8 @@ import java.rmi.server.UnicastRemoteObject;
 import rmi.common.Chat;
 import rmi.common.Server;
 
-/** Implementacja interfejsu Chat.java */
 public class ClientImpl extends UnicastRemoteObject implements Chat {
-	
+
 	private String name;
 	private Server server;
 	private static final long serialVersionUID = 1L;

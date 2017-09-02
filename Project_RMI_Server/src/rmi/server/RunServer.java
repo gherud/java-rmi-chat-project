@@ -15,23 +15,22 @@ import java.util.Map;
 import rmi.common.Chat;
 import rmi.common.Server;
 
-public class ServerRunnable extends UnicastRemoteObject implements Server {
+public class RunServer extends UnicastRemoteObject implements Server {
 
 	private static final long serialVersionUID = 1L;
 	private Map<String, Chat> user = new HashMap<String, Chat>();
 
-	public ServerRunnable() throws RemoteException {
+	public RunServer() throws RemoteException {
 		super();
 	}
 
 	public static void main(String[] args) throws RemoteException, MalformedURLException, 
-			AlreadyBoundException, InterruptedException, NotBoundException {
+	AlreadyBoundException, InterruptedException, NotBoundException {
 		LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
-		Naming.bind(Server.DEFAULT_NAME, new ServerRunnable());
-
+		Naming.bind(Server.DEFAULT_NAME, new RunServer());
 		Thread.sleep(100);
 	}
-	
+
 	@Override
 	public synchronized boolean logIn(String name) {
 		return !this.user.containsKey(name);
@@ -77,7 +76,7 @@ public class ServerRunnable extends UnicastRemoteObject implements Server {
 			this.sendUserListToClients();
 		}
 	}
-	
+
 	@Override
 	public synchronized void logOut(String name) {
 		this.user.remove(name);
