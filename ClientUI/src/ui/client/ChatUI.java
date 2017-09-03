@@ -58,7 +58,7 @@ public class ChatUI extends Application {
 					loop = true;
 					return;
 				}
-				else errorMessage = "U¿ytkownik ju¿ istnieje. Wybierz inn¹ nazwê.";
+				else errorMessage = "U¿ytkownik ju¿ istnieje! Wybierz inn¹ nazwê.";
 			}
 			else errorMessage = "Nazwa u¿ytkownika musi mieæ d³ugoœæ od 1 do 20 znaków.";
 			this.connectionError(errorMessage);
