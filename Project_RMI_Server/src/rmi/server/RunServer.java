@@ -28,7 +28,7 @@ public class RunServer extends UnicastRemoteObject implements Server {
 	AlreadyBoundException, InterruptedException, NotBoundException {
 		LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
 		Naming.bind(Server.DEFAULT_NAME, new RunServer());
-		
+
 		Thread.sleep(100);
 	}
 
