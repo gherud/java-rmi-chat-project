@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><testrun name="ClientImplTest" project="ClientUI" tests="3" started="3" failures="0" errors="0" ignored="0">
-  <testsuite name="test.ClientImplTest" time="0.0">
-    <testcase name="testIsNicknameOkay" classname="test.ClientImplTest" time="0.0"/>
+  <testsuite name="test.ClientImplTest" time="0.002">
+    <testcase name="testIsNicknameOkay" classname="test.ClientImplTest" time="0.001"/>
     <testcase name="testSendMessage" classname="test.ClientImplTest" time="0.0"/>
     <testcase name="testSendUserList" classname="test.ClientImplTest" time="0.0"/>
   </testsuite>
